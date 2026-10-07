@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aerolite</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F3EF;
+    --ink:#15151A;
+    --steel:#5B6472;
+    --line:#DEDBD6;
+    --signal:#3E7C74;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'IBM Plex Sans',sans-serif; color:var(--ink); background:var(--paper); line-height:1.5;}
+  h1,h2,h3,.brand{font-family:'Instrument Sans',sans-serif;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  a{color:inherit; text-decoration:none;}
+  @media(prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  nav{display:flex; align-items:center; justify-content:space-between; padding:28px 32px;}
+  .brand{font-size:19px; font-weight:700; letter-spacing:-0.01em;}
+  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--steel);}
+  @media(max-width:680px){ .navlinks{display:none;} }
+
+  /* ---- hero ---- */
+  .hero{padding:40px 32px 80px;}
+  .hero-grid{max-width:1120px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+  @media(max-width:860px){ .hero-grid{grid-template-columns:1fr; gap:56px;} }
+  .hero-text{opacity:0; transform:translateY(10px); animation:rise 0.7s ease-out 0.1s forwards;}
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+  .eyebrow{font-size:14px; color:var(--signal); font-weight:500; margin:0 0 18px;}
+  .hero h1{font-size:clamp(36px,5vw,58px); line-height:1.05; font-weight:700; letter-spacing:-0.015em; margin:0 0 22px; max-width:480px;}
+  .hero p{color:var(--steel); font-size:16px; max-width:400px; margin:0 0 32px;}
+  .cta-row{display:flex; gap:16px; align-items:center;}
+  .btn{display:inline-flex; align-items:center; padding:13px 24px; font-weight:600; font-size:14.5px; border-radius:2px; font-family:'IBM Plex Sans',sans-serif;}
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-primary:hover{background:#000;}
+  .btn-ghost{color:var(--ink); border-bottom:1px solid var(--ink); padding:13px 0;}
+
+  /* ---- isometric laptop, pure CSS ---- */
+  .laptop-stage{display:flex; justify-content:center; perspective:1400px;}
+  .laptop{
+    width:360px; transform:rotateX(50deg) rotateZ(-38deg);
+    opacity:0; animation:fadeIn 1s ease-out 0.4s forwards;
+  }
+  @keyframes fadeIn{ to{opacity:1;} }
+  .screen{
+    width:320px; height:210px; margin:0 auto;
+    border:2px solid var(--ink); border-radius:6px;
+    background:linear-gradient(160deg, #fff 0%, var(--paper) 100%);
+    position:relative;
+  }
+  .screen::after{
+    content:""; position:absolute; inset:14px;
+    border:1px solid var(--line); border-radius:3px;
+  }
+  .hinge{width:320px; height:10px; margin:0 auto; background:var(--ink); border-radius:2px;}
+  .base{
+    width:360px; height:16px; margin:0 auto;
+    background:var(--ink); border-radius:3px;
+    box-shadow:0 2px 0 var(--steel);
+  }
+
+  /* ---- specs ---- */
+  .specs{border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:28px 0;}
+  .specs-row{display:grid; grid-template-columns:repeat(4,1fr); gap:24px;}
+  @media(max-width:680px){ .specs-row{grid-template-columns:repeat(2,1fr); gap:32px;} }
+  .spec dt{font-size:13px; color:var(--steel); margin:0 0 6px;}
+  .spec dd{font-size:26px; font-weight:600; font-family:'Instrument Sans',sans-serif; margin:0;}
+  .spec dd span{font-size:15px; color:var(--steel); font-weight:400; font-family:'IBM Plex Sans',sans-serif;}
+
+  /* ---- materials ---- */
+  .materials{padding:88px 0;}
+  .mat-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:start;}
+  @media(max-width:860px){ .mat-grid{grid-template-columns:1fr; gap:36px;} }
+  .materials h2{font-size:30px; max-width:360px; line-height:1.2; margin:0 0 20px;}
+  .materials p{color:var(--steel); max-width:440px; font-size:15.5px;}
+  .mat-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--line);}
+  .mat-list li{padding:20px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:20px;}
+  .mat-list .label{font-weight:500;}
+  .mat-list .detail{color:var(--steel); font-size:14.5px; text-align:right; max-width:260px;}
+
+  /* ---- colorways ---- */
+  .colors{padding:0 0 88px;}
+  .colors h2{font-size:24px; margin:0 0 28px;}
+  .swatch-row{display:flex; gap:36px; flex-wrap:wrap;}
+  .swatch{display:flex; flex-direction:column; align-items:center; gap:10px;}
+  .swatch .dot{width:46px; height:46px; border-radius:50%; border:1px solid var(--line);}
+  .swatch .name{font-size:13px; color:var(--steel);}
+
+  .gallery{padding:0 0 88px;}
+  .gallery h2{font-size:24px; margin:0 0 28px;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px;}
+  @media(max-width:680px){ .gallery-grid{grid-template-columns:1fr;} }
+  .shot{border:1px solid var(--line); border-radius:4px; padding:40px 24px; display:flex; flex-direction:column; align-items:center; gap:20px; background:#fff;}
+  .shot .caption{font-size:13px; color:var(--steel);}
+
+  .shot-closed{width:180px; height:120px; border:2px solid var(--ink); border-radius:4px; background:linear-gradient(135deg,#fff,var(--paper));}
+  .shot-side{width:160px; height:10px; background:var(--ink); border-radius:2px; position:relative;}
+  .shot-side::before{content:""; position:absolute; left:0; bottom:8px; width:160px; height:100px; border:2px solid var(--ink); border-radius:4px 4px 0 0; transform:rotate(-8deg); transform-origin:bottom left;}
+  .shot-keys{width:200px; height:110px; border:2px solid var(--ink); border-radius:4px; display:grid; grid-template-columns:repeat(10,1fr); gap:3px; padding:10px;}
+  .shot-keys span{background:var(--line); border-radius:1px;}
+  .shot-ports{width:200px; height:16px; background:var(--ink); border-radius:3px; display:flex; align-items:center; justify-content:center; gap:14px;}
+  .shot-ports span{width:8px; height:8px; background:var(--paper); border-radius:1px;}
+
+  .testimonials{padding:0 0 88px;}
+  .testimonials h2{font-size:24px; margin:0 0 28px;}
+  .quote-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+  @media(max-width:860px){ .quote-grid{grid-template-columns:1fr;} }
+  .quote{border-top:2px solid var(--ink); padding-top:20px;}
+  .quote p{font-size:15.5px; line-height:1.6; margin:0 0 18px;}
+  .quote-who{display:flex; align-items:center; gap:12px;}
+  .quote-initial{width:34px; height:34px; border-radius:50%; background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; font-family:'Instrument Sans',sans-serif; flex-shrink:0;}
+  .quote-who .name{font-size:14px; font-weight:500;}
+  .quote-who .role{font-size:13px; color:var(--steel);}
+
+  .order{padding:0 0 88px;}
+  .order h2{font-size:28px; margin:0 0 10px;}
+  .order .sub{color:var(--steel); font-size:15px; margin:0 0 36px;}
+  .order-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px;}
+  @media(max-width:860px){ .order-grid{grid-template-columns:1fr; gap:32px;} }
+  .finish-pick{display:flex; gap:16px; margin-bottom:24px;}
+  .finish-opt{display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;}
+  .finish-opt input{position:absolute; opacity:0;}
+  .finish-opt .ring{width:40px; height:40px; border-radius:50%; border:2px solid transparent; display:flex; align-items:center; justify-content:center;}
+  .finish-opt input:checked + .ring{border-color:var(--ink);}
+  .finish-opt .dot{width:30px; height:30px; border-radius:50%;}
+  .finish-opt .fname{font-size:12px; color:var(--steel);}
+  .order-field{margin-bottom:18px;}
+  .order-field label{display:block; font-size:13px; font-weight:500; margin-bottom:6px;}
+  .order-field input, .order-field select{width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:2px; font-family:'IBM Plex Sans',sans-serif; font-size:14.5px; background:#fff; color:var(--ink);}
+  .order-field input:focus, .order-field select:focus{outline:2px solid var(--signal); outline-offset:1px;}
+  .order-summary{background:#fff; border:1px solid var(--line); padding:28px;}
+  .order-summary .row{display:flex; justify-content:space-between; font-size:14.5px; padding:10px 0; border-bottom:1px solid var(--line);}
+  .order-summary .row.total{font-weight:600; font-size:16px; border-bottom:none; padding-top:16px;}
+  .order-msg{margin-top:16px; font-size:14px; padding:12px 14px; display:none;}
+  .order-msg.show{display:block; background:#E7F0EE; color:var(--signal);}
+
+@media(max-width:480px){
+  nav{padding:20px;}
+  .hero{padding:24px 20px 56px;}
+  .wrap{padding:0 20px;}
+  .cta-row{flex-direction:column; align-items:flex-start; gap:14px;}
+  .cta-row .btn{width:100%; justify-content:center;}
+  .btn-ghost{border-bottom:none; padding:0;}
+  .finish-pick{gap:10px;}
+  .finish-opt .ring{width:34px; height:34px;}
+  .finish-opt .dot{width:24px; height:24px;}
+  .order-summary{padding:20px;}
+  footer{flex-direction:column; gap:8px; text-align:center;}
+  .laptop{width:260px;}
+  .screen{width:230px; height:150px;}
+  .hinge, .base{width:260px;}
+}
+
+  footer{padding:28px 32px; display:flex; justify-content:space-between; font-size:13px; color:var(--steel);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Aerolite</div>
+  <div class="navlinks">
+    <a href="#specs">Specs</a>
+    <a href="#materials">Build</a>
+    <a href="#colors">Finishes</a>
+  </div>
+  <a href="#order" class="btn btn-primary">Pre-order</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow">Introducing Aerolite</p>
+      <h1>Weighs less than your attention span.</h1>
+      <p>910 grams of machined aluminum, engineered so the laptop disappears and the work stays in front of you.</p>
+      <div class="cta-row">
+        <a href="#close" class="btn btn-primary">Pre-order — $1,499</a>
+        <a href="#specs" class="btn btn-ghost">See the specs</a>
+      </div>
+    </div>
+    <div class="laptop-stage">
+      <div class="laptop">
+        <div class="screen"></div>
+        <div class="hinge"></div>
+        <div class="base"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="specs" id="specs">
+  <div class="wrap">
+    <dl class="specs-row">
+      <div class="spec"><dt>Weight</dt><dd>910<span>g</span></dd></div>
+      <div class="spec"><dt>Thickness</dt><dd>9.8<span>mm</span></dd></div>
+      <div class="spec"><dt>Battery</dt><dd>22<span>hrs</span></dd></div>
+      <div class="spec"><dt>Display</dt><dd>14.2<span>" OLED</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="materials" id="materials">
+  <div class="wrap mat-grid">
+    <div>
+      <h2>Cut from a single block, not assembled from parts.</h2>
+      <p>Most thin laptops get there by using less material. Aerolite gets there by using less of it more precisely — a unibody chassis machined from one piece of aluminum, with no seams for heat or flex to escape through.</p>
+    </div>
+    <ul class="mat-list">
+      <li><span class="label">Chassis</span><span class="detail">Single-piece machined aluminum, anodized finish</span></li>
+      <li><span class="label">Hinge</span><span class="detail">Dual-torque steel, opens one-handed, holds any angle</span></li>
+      <li><span class="label">Keyboard deck</span><span class="detail">0.3mm deflection under full-force typing</span></li>
+      <li><span class="label">Cooling</span><span class="detail">Fanless up to 15W sustained, silent under typical load</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="colors" id="colors">
+  <div class="wrap">
+    <h2>Three finishes, all the same inside.</h2>
+    <div class="swatch-row">
+      <div class="swatch"><div class="dot" style="background:#D9D6CC;"></div><span class="name">Ash</span></div>
+      <div class="swatch"><div class="dot" style="background:#2B2E33;"></div><span class="name">Graphite</span></div>
+      <div class="swatch"><div class="dot" style="background:#5B6472;"></div><span class="name">Steel</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <h2>Every angle, considered.</h2>
+    <div class="gallery-grid">
+      <div class="shot">
+        <div class="shot-closed"></div>
+        <span class="caption">Closed — 9.8mm at the thickest point</span>
+      </div>
+      <div class="shot">
+        <div class="shot-side"></div>
+        <span class="caption">Profile — opens to 135° one-handed</span>
+      </div>
+      <div class="shot">
+        <div class="shot-keys">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <span class="caption">Keyboard deck — 0.3mm deflection under load</span>
+      </div>
+      <div class="shot">
+        <div class="shot-ports"><span></span><span></span><span></span></div>
+        <span class="caption">Port edge — two USB-C, one 3.5mm jack</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="wrap">
+    <h2>What people notice first.</h2>
+    <div class="quote-grid">
+      <div class="quote">
+        <p>"I stopped noticing I was carrying it. That's the whole review, really."</p>
+        <div class="quote-who">
+          <div class="quote-initial">M</div>
+          <div><div class="name">Maya R.</div><div class="role">Product designer</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p>"Twenty-two hours isn't a spec sheet number for me, it's an actual full week of travel days without hunting for an outlet."</p>
+        <div class="quote-who">
+          <div class="quote-initial">J</div>
+          <div><div class="name">Jordan K.</div><div class="role">Freelance editor</div></div>
+        </div>
+      </div>
+      <div class="quote">
+        <p>"No fan noise, no heat on my lap, no seams. It feels like it was carved, not built."</p>
+        <div class="quote-who">
+          <div class="quote-initial">A</div>
+          <div><div class="name">Alex T.</div><div class="role">Software engineer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="order" id="order">
+  <div class="wrap">
+    <h2>Reserve yours</h2>
+    <p class="sub">Pre-orders ship in six weeks. $100 deposit, fully refundable until it ships.</p>
+    <div class="order-grid">
+      <form id="orderForm">
+        <div class="finish-pick">
+          <label class="finish-opt">
+            <input type="radio" name="finish" value="Ash" checked>
+            <span class="ring"><span class="dot" style="background:#D9D6CC;"></span></span>
+            <span class="fname">Ash</span>
+          </label>
+          <label class="finish-opt">
+            <input type="radio" name="finish" value="Graphite">
+            <span class="ring"><span class="dot" style="background:#2B2E33;"></span></span>
+            <span class="fname">Graphite</span>
+          </label>
+          <label class="finish-opt">
+            <input type="radio" name="finish" value="Steel">
+            <span class="ring"><span class="dot" style="background:#5B6472;"></span></span>
+            <span class="fname">Steel</span>
+          </label>
+        </div>
+        <div class="order-field">
+          <label for="orderName">Full name</label>
+          <input type="text" id="orderName" required>
+        </div>
+        <div class="order-field">
+          <label for="orderEmail">Email</label>
+          <input type="email" id="orderEmail" required>
+        </div>
+        <div class="order-field">
+          <label for="orderQty">Quantity</label>
+          <select id="orderQty">
+            <option>1</option><option>2</option><option>3</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Reserve — $100 deposit</button>
+        <div class="order-msg" id="orderMsg"></div>
+      </form>
+
+      <div class="order-summary">
+        <div class="row"><span>Aerolite laptop</span><span>$1,499</span></div>
+        <div class="row"><span>Deposit due today</span><span>$100</span></div>
+        <div class="row"><span>Due at shipping</span><span>$1,399</span></div>
+        <div class="row total"><span>Total</span><span>$1,499</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="close" id="close">
+  <h2>Pre-orders ship in six weeks. Reserve yours before the first run sells out.</h2>
+  <a href="#order" class="btn btn-primary">Pre-order Aerolite — $1,499</a>
+</section>
+
+<footer>
+  <span>Aerolite</span>
+  <span>© 2026</span>
+</footer>
+<script>
+(function(){
+  const form = document.getElementById('orderForm');
+  const msg = document.getElementById('orderMsg');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const finish = form.finish.value;
+    const name = document.getElementById('orderName').value;
+    msg.textContent = `Thanks, ${name} — your ${finish} Aerolite is reserved. Check your email for confirmation.`;
+    msg.classList.add('show');
+    form.reset();
+  });
+})();
+</script>
+
+</body>
+</html>
